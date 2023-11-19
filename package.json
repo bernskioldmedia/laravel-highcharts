@@ -1,0 +1,9 @@
+{
+    "name": "laravel-highcharts",
+    "version": "1.0.0",
+    "private": true,
+    "license": "MIT",
+    "devDependencies": {
+        "lodash": "^4.0"
+    }
+}

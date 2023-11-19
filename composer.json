@@ -1,0 +1,64 @@
+{
+    "name": "bernskioldmedia/laravel-highcharts",
+    "description": "A Laravel and Livewire wrapper for Highcharts.",
+    "keywords": [
+        "bernskioldmedia",
+        "laravel",
+        "livewire",
+        "highcharts"
+    ],
+    "homepage": "https://github.com/bernskioldmedia/laravel-highcharts",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bernskiold Media",
+            "email": "hello@bernskioldmedia.com",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^8.2",
+        "illuminate/contracts": "^10.0",
+        "livewire/livewire": "*"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0",
+        "nunomaduro/collision": "^7.0",
+        "orchestra/testbench": "^8.0",
+        "pestphp/pest": "^2.0",
+        "pestphp/pest-plugin-laravel": "^v2.2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "BernskioldMedia\\LaravelHighcharts\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BernskioldMedia\\LaravelHighcharts\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "BernskioldMedia\\LaravelHighcharts\\LaravelHighchartsServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint"
+    }
+}
