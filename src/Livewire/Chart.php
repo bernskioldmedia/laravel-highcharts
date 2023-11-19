@@ -6,8 +6,15 @@ use Livewire\Component;
 
 class Chart extends Component
 {
-
     public string $chartId;
+
+    public ?\BernskioldMedia\LaravelHighcharts\Data\Chart $chart = null;
+
+    public array $options = [];
+
+    public array $extras = [];
+
+    public array $data = [];
 
     public string $height = '400px';
 

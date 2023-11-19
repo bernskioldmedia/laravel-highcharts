@@ -127,11 +127,16 @@ class Chart implements Arrayable, Jsonable
         return $this;
     }
 
-    public function height(int $height): self
+    public function height(string $height): self
     {
         $this->set('chart.height', $height);
 
         return $this;
+    }
+
+    public function square(): self
+    {
+        return $this->height('100%');
     }
 
     public function backgroundColor(string $color): self
@@ -199,9 +204,10 @@ class Chart implements Arrayable, Jsonable
 
     public function toArray(): array
     {
-        return array_merge(
-            $this->options,
-            $this->extras->toArray()
-        );
+        return [
+            'options' => $this->options,
+            'extras' => $this->extras,
+            'data' => $this->series,
+        ];
     }
 }
