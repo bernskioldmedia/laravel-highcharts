@@ -9,7 +9,6 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
-use function array_merge;
 
 class Chart implements Arrayable, Jsonable
 {
@@ -31,9 +30,9 @@ class Chart implements Arrayable, Jsonable
         $this->extras = new ChartExtras();
     }
 
-    public static function make(): self
+    public static function make(...$args): self
     {
-        return new self();
+        return new self($args);
     }
 
     public function addSeries(Series $series): self
@@ -198,6 +197,13 @@ class Chart implements Arrayable, Jsonable
         if ($left !== null) {
             $this->set('chart.marginLeft', $left);
         }
+
+        return $this;
+    }
+
+    public function type(string $type): self
+    {
+        $this->set('chart.type', $type);
 
         return $this;
     }

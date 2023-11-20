@@ -42,4 +42,11 @@ trait ConfiguresTooltip
 
         return $this;
     }
+
+    public function sharedTooltip(): self
+    {
+        $this->set('tooltip.shared', true);
+
+        return $this;
+    }
 }
