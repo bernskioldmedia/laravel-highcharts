@@ -2,21 +2,30 @@
 
 namespace BernskioldMedia\LaravelHighcharts\Data;
 
+use BernskioldMedia\LaravelHighcharts\Concerns\ConfiguresChartType;
 use BernskioldMedia\LaravelHighcharts\Concerns\ConfiguresTooltip;
 use BernskioldMedia\LaravelHighcharts\Concerns\ConvertsArrayToJson;
 use BernskioldMedia\LaravelHighcharts\Concerns\HasOptions;
+use BernskioldMedia\LaravelHighcharts\Concerns\Makeable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
 
+/**
+ * @method static self make()
+ */
 class Chart implements Arrayable, Jsonable
 {
     use Conditionable,
+        Makeable,
         Tappable,
         HasOptions,
+        ConfiguresChartType,
         ConfiguresTooltip,
         ConvertsArrayToJson;
+
+    public string $key;
 
     public ChartExtras $extras;
 
@@ -25,14 +34,19 @@ class Chart implements Arrayable, Jsonable
      */
     public array $series = [];
 
-    public function __construct()
+    public function __construct(string $key = null)
     {
+        $this->key = $key ?? str()->random(20);
+
         $this->extras = new ChartExtras();
+        $this->options = config('highcharts.defaults');
     }
 
-    public static function make(...$args): self
+    public function key(string $key): self
     {
-        return new self($args);
+        $this->key = $key;
+
+        return $this;
     }
 
     public function addSeries(Series $series): self
@@ -201,19 +215,52 @@ class Chart implements Arrayable, Jsonable
         return $this;
     }
 
-    public function type(string $type): self
+    public function withDataLabels(): self
     {
-        $this->set('chart.type', $type);
+        $this->set('plotOptions.series.dataLabels.enabled', true);
 
         return $this;
+    }
+
+    public function withoutDataLabels(): self
+    {
+        $this->set('plotOptions.series.dataLabels.enabled', false);
+
+        return $this;
+    }
+
+    public function options(): array
+    {
+        return array_merge(
+            config('highcharts.defaults', []),
+            config("highcharts.defaultsForType.{$this->type}", []),
+            $this->options
+        );
+    }
+
+    public function chartData(): array
+    {
+        return array_merge(
+            $this->options(),
+            [
+                'chart' => [
+                    'type' => $this->type,
+                ],
+                'series' => collect($this->series)->toArray(),
+            ]
+        );
+    }
+
+    public function checksum(): string
+    {
+        return md5($this->toJson());
     }
 
     public function toArray(): array
     {
         return [
-            'options' => $this->options,
+            'chartData' => $this->chartData(),
             'extras' => $this->extras,
-            'data' => $this->series,
         ];
     }
 }

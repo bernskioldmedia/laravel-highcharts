@@ -7,7 +7,7 @@ use Illuminate\Support\Arr;
 trait HasOptions
 {
 
-    public array $options = [];
+    protected array $options = [];
 
     public function set(string $key, mixed $value): self
     {
@@ -25,4 +25,8 @@ trait HasOptions
         return $this;
     }
 
+    public function options(): array
+    {
+        return $this->options;
+    }
 }

@@ -4,33 +4,29 @@ namespace BernskioldMedia\LaravelHighcharts\Data;
 
 use BernskioldMedia\LaravelHighcharts\Concerns\ConvertsArrayToJson;
 use BernskioldMedia\LaravelHighcharts\Concerns\HasOptions;
+use BernskioldMedia\LaravelHighcharts\Concerns\Makeable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
 
+/**
+ * @method static static make(int|float|null $x = null, int|float|null $y = null, ?string $name = null)
+ */
 class DataPoint implements Arrayable, Jsonable
 {
-    use HasOptions,
+    use Makeable,
+        HasOptions,
         Conditionable,
         Tappable,
         ConvertsArrayToJson;
 
-    public string|null $name = null;
-
-    public int|float|null $x = null;
-
-    public int|float|null $y = null;
-
-    public function __construct(int|float|null $x = null, int|float|null $y = null)
+    public function __construct(
+        public int|float|null $x = null,
+        public int|float|null $y = null,
+        public ?string        $name = null,
+    )
     {
-        $this->x = $x;
-        $this->y = $y;
-    }
-
-    public static function make(int|float|null $x = null, int|float|null $y = null): self
-    {
-        return new static($x, $y);
     }
 
     public function x(int|float|null $x): self

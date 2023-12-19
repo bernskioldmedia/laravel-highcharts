@@ -2,27 +2,22 @@
 
 namespace BernskioldMedia\LaravelHighcharts;
 
+use BernskioldMedia\LaravelHighcharts\Concerns\Livewire\InteractsWithCharts;
 use Livewire\Component;
 
 class Chart extends Component
 {
-    public string $chartId;
+    use InteractsWithCharts;
 
-    public ?\BernskioldMedia\LaravelHighcharts\Data\Chart $chart = null;
+    public Data\Chart $chart;
 
-    public array $options = [];
-
-    public array $extras = [];
-
-    public array $data = [];
-
-    public string $height = '400px';
-
-    public bool $alwaysSquare = false;
-
-    public function mount(): void
+    public function rendering(): void
     {
-        $this->chartId = str()->random(20);
+        $this->sendChartDataUpdate();
     }
 
+    protected function getChart(): \BernskioldMedia\LaravelHighcharts\Data\Chart
+    {
+        return $this->chart;
+    }
 }

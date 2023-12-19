@@ -2,35 +2,26 @@
 
 namespace BernskioldMedia\LaravelHighcharts\Data;
 
+use BernskioldMedia\LaravelHighcharts\Concerns\Makeable;
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @method static ChartLabel make(string $label, int|float $x, int|float $y, string $key = '', array $styles = [], array $attributes = [])
+ */
 class ChartLabel implements Arrayable
 {
+    use Makeable;
 
-    public string $key;
-
-    public string $label;
-
-    public float $x = 0.0;
-
-    public float $y = 0.0;
-
-    public array $styles = [];
-
-    public array $attributes = [];
-
-    public function __construct(string $label, int|float $x, int|float $y, string $key = '', array $styles = [])
+    public function __construct(
+        public string $label,
+        public int|float $x = 0.0,
+        public int|float $y = 0.0,
+        public string $key = '',
+        public array $styles = [],
+        public array $attributes = [],
+    )
     {
-        $this->key = $key ?? str()->random(8);
-        $this->label = $label;
-        $this->x = $x;
-        $this->y = $y;
-        $this->styles = $styles;
-    }
-
-    public static function make(string $label, int|float $x, int|float $y, string $key = '', array $styles = []): self
-    {
-        return new self($label, $x, $y, $key, $styles);
+        $this->key = $this->key ?? str()->random(8);
     }
 
     public function label(string $label): self

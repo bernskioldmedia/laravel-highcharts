@@ -20,9 +20,18 @@ export default () => {
             },
         },
 
+        updateChart: {
+            ['@update-chart.document'](event) {
+                if (this.chart.renderTo.id !== event.detail.chartId) {
+                    return;
+                }
+
+                this.chart.update(event.detail.data);
+            }
+        },
+
         draw(component) {
-            const data = component.get('data') || {};
-            const customOptions = component.get('options') || {};
+            const data = component.get('chartData') || {};
             const extras = component.get('extras') || {};
 
             let categories = {};
@@ -37,83 +46,72 @@ export default () => {
                 }
             }
 
-            const options = {
-                chart: {
-                    events: {
-                        render: function () {
-                            let chart = this;
+            const chartData = component.get('chartData') || {};
 
-                            if (extras.labels && extras.labels.length > 0) {
-                                extras.labels.forEach((label) => {
-                                    addText(
-                                        chart,
-                                        label.key,
-                                        label.label,
-                                        label.x,
-                                        label.y,
-                                        label.styles || {},
-                                        label.attributes || {}
-                                    );
-                                });
-                            }
+            // Add custom drawings.
+            chartData.chart.events.render = function () {
+                let chart = this;
 
-                            if (extras.lines && extras.lines.length > 0) {
-                                extras.lines.forEach((line) => {
-                                    addLine(
-                                        chart,
-                                        line.key,
-                                        line.x1,
-                                        line.y1,
-                                        line.x2,
-                                        line.y2,
-                                        line.attributes || {}
-                                    );
-                                });
-                            }
-
-                            if (extras.quadrants && extras.quadrants.length > 0) {
-                                extras.quadrants.forEach((line) => {
-                                    addQuadrant(
-                                        chart,
-                                        line.key,
-                                        line.x1,
-                                        line.y1,
-                                        line.x2,
-                                        line.y2,
-                                        line.attributes || {}
-                                    );
-                                });
-                            }
-                        }
-                    }
-                },
-                series: data,
-            };
-
-            if (categories.length > 0) {
-                if (options.xAxis === undefined) {
-                    options.xAxis = {};
+                if (extras.labels && extras.labels.length > 0) {
+                    extras.labels.forEach((label) => {
+                        addText(
+                            chart,
+                            label.key,
+                            label.label,
+                            label.x,
+                            label.y,
+                            label.styles || {},
+                            label.attributes || {}
+                        );
+                    });
                 }
 
-                options.xAxis.categories = categories;
+                if (extras.lines && extras.lines.length > 0) {
+                    extras.lines.forEach((line) => {
+                        addLine(
+                            chart,
+                            line.key,
+                            line.x1,
+                            line.y1,
+                            line.x2,
+                            line.y2,
+                            line.attributes || {}
+                        );
+                    });
+                }
+
+                if (extras.quadrants && extras.quadrants.length > 0) {
+                    extras.quadrants.forEach((line) => {
+                        addQuadrant(
+                            chart,
+                            line.key,
+                            line.x1,
+                            line.y1,
+                            line.x2,
+                            line.y2,
+                            line.attributes || {}
+                        );
+                    });
+                }
+            }
+
+            if (categories.length > 0) {
+                if (chartData.xAxis === undefined) {
+                    chartData.xAxis = {};
+                }
+
+                chartData.xAxis.categories = categories;
             }
 
             if (this.chart) {
-                this.chart.update({
-                    ...options,
-                    ...customOptions
-                });
+                this.chart.update(chartData);
             } else {
-                this.chart = window.Highcharts.chart(
-                    this.$refs.container,
-                    {...options, ...customOptions}
-                );
+                this.chart = window.Highcharts.chart(this.$refs.container, chartData);
                 this.chart.render();
             }
         }
     };
 }
-
 
 export function addQuadrant(chart, key, x1, y1, x2, y2, attr = {}) {
     maybeDestroyObject(chart, key);
