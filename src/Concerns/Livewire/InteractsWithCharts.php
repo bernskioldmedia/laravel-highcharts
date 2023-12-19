@@ -3,15 +3,15 @@
 namespace BernskioldMedia\LaravelHighcharts\Concerns\Livewire;
 
 use BernskioldMedia\LaravelHighcharts\Data\Chart;
-use Livewire\Attributes\Locked;
+use function method_exists;
 
 trait InteractsWithCharts
 {
 
-    #[Locked]
+    public ?array $cachedChartData = null;
+
     public ?string $chartKey = null;
 
-    #[Locked]
     public ?string $chartChecksum = null;
 
     abstract protected function getChart(): Chart;
@@ -19,25 +19,52 @@ trait InteractsWithCharts
     public function mountInteractsWithCharts(): void
     {
         $this->chartKey = $this->getChart()->key;
-        $this->chartChecksum = $this->getChart()->checksum();
+    }
+
+    protected function getCachedData(): array
+    {
+        if (empty($this->cachedChartData)) {
+            $this->cachedChartData = $this->getChart()->chartData();
+        }
+
+        return $this->cachedChartData;
     }
 
     public function renderingInteractsWithCharts(): void
     {
-        $this->chartChecksum = $this->getChart()->checksum();
+        $this->sendChartDataUpdate();
     }
 
-    public function updatedChartChecksum(): void
+    protected function generateChartChecksum(): string
     {
-        $this->sendChartDataUpdate();
+        return md5(json_encode($this->getCachedData()));
     }
 
     public function sendChartDataUpdate(): void
     {
-        $this->dispatch(
-            'updateChartData',
-            chartId: $this->getChart()->key,
-            data: $this->getChart()->chartData()
-        );
+        $newChecksum = $this->generateChartChecksum();
+
+        if ($newChecksum === $this->chartChecksum) {
+            return;
+        }
+
+        $this->chartChecksum = $newChecksum;
+
+        // Livewire 3.
+        if (method_exists($this, 'dispatch')) {
+            $this->dispatch('updateChartData', chartId: $this->getChart()->key, data: $this->getChart()->chartData());
+
+            return;
+        }
+
+        // Livewire 2.
+        if (method_exists($this, 'emit')) {
+            $this->emit('updateChartData', [
+                'chartId' => $this->getChart()->key,
+                'data' => $this->getChart()->chartData(),
+            ]);
+
+            return;
+        }
     }
 }

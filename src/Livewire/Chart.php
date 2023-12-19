@@ -1,9 +1,10 @@
 <?php
 
-namespace BernskioldMedia\LaravelHighcharts;
+namespace BernskioldMedia\LaravelHighcharts\Livewire;
 
 use BernskioldMedia\LaravelHighcharts\Concerns\Livewire\InteractsWithCharts;
 use Livewire\Component;
+use BernskioldMedia\LaravelHighcharts\Data;
 
 class Chart extends Component
 {
@@ -11,12 +12,7 @@ class Chart extends Component
 
     public Data\Chart $chart;
 
-    public function rendering(): void
-    {
-        $this->sendChartDataUpdate();
-    }
-
-    protected function getChart(): \BernskioldMedia\LaravelHighcharts\Data\Chart
+    protected function getChart(): Data\Chart
     {
         return $this->chart;
     }
