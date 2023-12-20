@@ -1,11 +1,25 @@
 export default () => {
     return {
         chart: null,
+        extras: [],
 
         init() {
-            setTimeout(() => {
-                this.draw(this.$wire);
-            }, 0);
+            Alpine.effect(() => {
+                this.$nextTick(() => {
+                    this.extras = this.$wire.get('chartExtras') || {};
+                    this.initChart();
+                });
+            });
+
+            this.$wire.$on('updateChartData', ({data, extras}) => {
+                this.chart.update(data);
+                this.chart.resize();
+
+                if (this.extras !== extras) {
+                    this.extras = extras;
+                    this.chart.redraw();
+                }
+            });
         },
 
         exportChart: {
@@ -20,40 +34,15 @@ export default () => {
             },
         },
 
-        updateChart: {
-            ['@update-chart.document'](event) {
-                if (this.chart.renderTo.id !== event.detail.chartId) {
-                    return;
-                }
-
-                this.chart.update(event.detail.data);
-            }
-        },
-
-        draw(component) {
-            const data = component.get('chartData') || {};
-            const extras = component.get('extras') || {};
-
-            let categories = {};
-
-            if (data.length !== 0) {
-                categories = data[0].categories || {};
-
-                if (data[0].x !== undefined) {
-                    categories = data[0].x.map((item) => {
-                        return item;
-                    });
-                }
-            }
-
-            const chartData = component.get('chartData') || {};
+        initChart() {
+            const data = this.$wire.get('chartData') || {};
 
             // Add custom drawings.
-            chartData.chart.events.render = function () {
+            data.chart.events.render = function () {
                 let chart = this;
 
-                if (extras.labels && extras.labels.length > 0) {
-                    extras.labels.forEach((label) => {
+                if (this.extras.labels && this.extras.labels.length > 0) {
+                    this.extras.labels.forEach((label) => {
                         addText(
                             chart,
                             label.key,
@@ -66,8 +55,8 @@ export default () => {
                     });
                 }
 
-                if (extras.lines && extras.lines.length > 0) {
-                    extras.lines.forEach((line) => {
+                if (this.extras.lines && this.extras.lines.length > 0) {
+                    this.extras.lines.forEach((line) => {
                         addLine(
                             chart,
                             line.key,
@@ -80,8 +69,8 @@ export default () => {
                     });
                 }
 
-                if (extras.quadrants && extras.quadrants.length > 0) {
-                    extras.quadrants.forEach((line) => {
+                if (this.extras.quadrants && this.extras.quadrants.length > 0) {
+                    this.extras.quadrants.forEach((line) => {
                         addQuadrant(
                             chart,
                             line.key,
@@ -95,18 +84,10 @@ export default () => {
                 }
             }
 
-            if (categories.length > 0) {
-                if (chartData.xAxis === undefined) {
-                    chartData.xAxis = {};
-                }
-
-                chartData.xAxis.categories = categories;
-            }
-
             if (this.chart) {
-                this.chart.update(chartData);
+                this.chart.update(data);
             } else {
-                this.chart = window.Highcharts.chart(this.$refs.container, chartData);
+                this.chart = window.Highcharts.chart(this.$refs.container, data);
                 this.chart.render();
             }
         }

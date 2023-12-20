@@ -8,7 +8,9 @@ use function method_exists;
 trait InteractsWithCharts
 {
 
-    public ?array $cachedChartData = null;
+    public ?array $chartData = null;
+
+    public ?array $chartExtras = null;
 
     public ?string $chartKey = null;
 
@@ -23,11 +25,15 @@ trait InteractsWithCharts
 
     protected function getCachedData(): array
     {
-        if (empty($this->cachedChartData)) {
-            $this->cachedChartData = $this->getChart()->chartData();
+        if (empty($this->chartData)) {
+            $this->chartData = $this->getChart()->chartData();
         }
 
-        return $this->cachedChartData;
+        if (empty($this->chartExtras)) {
+            $this->chartExtras = $this->getChart()->extras->toArray();
+        }
+
+        return $this->chartData;
     }
 
     public function renderingInteractsWithCharts(): void
@@ -52,7 +58,12 @@ trait InteractsWithCharts
 
         // Livewire 3.
         if (method_exists($this, 'dispatch')) {
-            $this->dispatch('updateChartData', chartId: $this->getChart()->key, data: $this->getChart()->chartData());
+            $this->dispatch(
+                'updateChartData',
+                chartId: $this->getChart()->key,
+                data: $this->getChart()->chartData(),
+                extras: $this->getChart()->extras->toArray(),
+            );
 
             return;
         }
@@ -62,6 +73,7 @@ trait InteractsWithCharts
             $this->emit('updateChartData', [
                 'chartId' => $this->getChart()->key,
                 'data' => $this->getChart()->chartData(),
+                'extras' => $this->getChart()->extras->toArray(),
             ]);
 
             return;
