@@ -1,5 +1,5 @@
 <?php
 
-use BernskioldMedia\LaravelPpt\Tests\TestCase;
+use BernskioldMedia\LaravelHighcharts\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);

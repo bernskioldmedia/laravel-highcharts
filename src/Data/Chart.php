@@ -5,21 +5,24 @@ namespace BernskioldMedia\LaravelHighcharts\Data;
 use BernskioldMedia\LaravelHighcharts\Concerns\ConfiguresChartType;
 use BernskioldMedia\LaravelHighcharts\Concerns\ConfiguresTooltip;
 use BernskioldMedia\LaravelHighcharts\Concerns\ConvertsArrayToJson;
+use BernskioldMedia\LaravelHighcharts\Concerns\Dumpable;
 use BernskioldMedia\LaravelHighcharts\Concerns\HasOptions;
 use BernskioldMedia\LaravelHighcharts\Concerns\Makeable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
+use function dump;
 
 /**
- * @method static self make()
+ * @method static self make(?string $key = null)
  */
 class Chart implements Arrayable, Jsonable
 {
     use Conditionable,
         Makeable,
         Tappable,
+        Dumpable,
         HasOptions,
         ConfiguresChartType,
         ConfiguresTooltip,
@@ -34,7 +37,7 @@ class Chart implements Arrayable, Jsonable
      */
     public array $series = [];
 
-    public function __construct(string $key = null)
+    public function __construct(?string $key = null)
     {
         $this->key = $key ?? str()->random(20);
 
@@ -262,5 +265,15 @@ class Chart implements Arrayable, Jsonable
             'chartData' => $this->chartData(),
             'extras' => $this->extras,
         ];
+    }
+
+    public function dump(...$args)
+    {
+        dump(
+            $this->toArray(),
+            ...$args,
+        );
+
+        return $this;
     }
 }

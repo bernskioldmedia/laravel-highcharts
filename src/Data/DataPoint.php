@@ -3,6 +3,7 @@
 namespace BernskioldMedia\LaravelHighcharts\Data;
 
 use BernskioldMedia\LaravelHighcharts\Concerns\ConvertsArrayToJson;
+use BernskioldMedia\LaravelHighcharts\Concerns\Dumpable;
 use BernskioldMedia\LaravelHighcharts\Concerns\HasOptions;
 use BernskioldMedia\LaravelHighcharts\Concerns\Makeable;
 use Illuminate\Contracts\Support\Arrayable;
@@ -19,6 +20,7 @@ class DataPoint implements Arrayable, Jsonable
         HasOptions,
         Conditionable,
         Tappable,
+        Dumpable,
         ConvertsArrayToJson;
 
     public function __construct(
@@ -72,4 +74,13 @@ class DataPoint implements Arrayable, Jsonable
         );
     }
 
+    public function dump(...$args)
+    {
+        dump(
+            $this->toArray(),
+            ...$args,
+        );
+
+        return $this;
+    }
 }

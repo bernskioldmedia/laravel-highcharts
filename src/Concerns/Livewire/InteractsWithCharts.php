@@ -48,7 +48,7 @@ trait InteractsWithCharts
         return md5(json_encode($this->chartData));
     }
 
-    public function sendChartDataUpdate(): void
+    protected function sendChartDataUpdate(): void
     {
         $this->getCachedData();
 

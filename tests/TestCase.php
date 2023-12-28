@@ -1,8 +1,8 @@
 <?php
 
-namespace BernskioldMedia\LaravelPpt\Tests;
+namespace BernskioldMedia\LaravelHighcharts\Tests;
 
-use BernskioldMedia\LaravelPpt\LaravelPptServiceProvider;
+use BernskioldMedia\LaravelHighcharts\LaravelHighchartsServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -13,24 +13,19 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'BernskioldMedia\\LaravelPpt\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn(string $modelName) => 'BernskioldMedia\\LaravelHighcharts\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
     }
 
     protected function getPackageProviders($app)
     {
         return [
-            LaravelPptServiceProvider::class,
+            LaravelHighchartsServiceProvider::class,
         ];
     }
 
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
-
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_laravel-ppt_table.php.stub';
-        $migration->up();
-        */
     }
 }

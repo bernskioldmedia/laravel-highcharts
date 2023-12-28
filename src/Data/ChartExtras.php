@@ -3,10 +3,14 @@
 namespace BernskioldMedia\LaravelHighcharts\Data;
 
 use BernskioldMedia\LaravelHighcharts\Concerns\ConvertsArrayToJson;
+use BernskioldMedia\LaravelHighcharts\Concerns\Dumpable;
 use BernskioldMedia\LaravelHighcharts\Concerns\Makeable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Support\Traits\Conditionable;
+use Illuminate\Support\Traits\Tappable;
 use function collect;
+use function dump;
 
 /**
  * @method static static make()
@@ -14,7 +18,10 @@ use function collect;
 class ChartExtras implements Arrayable, Jsonable
 {
     use ConvertsArrayToJson,
-        Makeable;
+        Makeable,
+        Dumpable,
+        Conditionable,
+        Tappable;
 
     /**
      * @var array<ChartLabel>
@@ -61,4 +68,13 @@ class ChartExtras implements Arrayable, Jsonable
         ];
     }
 
+    public function dump(...$args)
+    {
+        dump(
+            $this->toArray(),
+            ...$args,
+        );
+
+        return $this;
+    }
 }

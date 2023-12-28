@@ -1,1 +1,0 @@
-<x-highcharts::chart/>
