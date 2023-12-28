@@ -16,10 +16,9 @@ export default () => {
             });
 
             this.$wire.$on('updateChartData', ({data, extras}) => {
-                const chart = getChart(this.$refs.container);
+                const chart = getChart(this.$refs.container.id);
 
                 chart.update(data);
-                chart.resize();
 
                 if (this.extras !== extras) {
                     this.extras = extras;
@@ -44,6 +43,9 @@ export default () => {
             const data = this.$wire.get('chartData') || {};
             const extras = this.extras;
 
+            data.chart = data.chart || {};
+            data.chart.events = data.chart.events || {};
+
             // Add custom drawings.
             data.chart.events.render = function () {
                 addTextsToChart(extras.labels || [], this);
@@ -51,12 +53,8 @@ export default () => {
                 addQuadrantsToChart(extras.quadrants || [], this);
             }
 
-            if (this.chart) {
-                this.chart.update(data);
-            } else {
-                this.chart = window.Highcharts.chart(this.$refs.container, data);
-                this.chart.render();
-            }
+            const chart = window.Highcharts.chart(this.$refs.container, data);
+            chart.render();
         },
     };
 }

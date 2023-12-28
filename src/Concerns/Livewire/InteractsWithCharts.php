@@ -3,6 +3,8 @@
 namespace BernskioldMedia\LaravelHighcharts\Concerns\Livewire;
 
 use BernskioldMedia\LaravelHighcharts\Data\Chart;
+use function json_encode;
+use function md5;
 use function method_exists;
 
 trait InteractsWithCharts
@@ -43,11 +45,13 @@ trait InteractsWithCharts
 
     protected function generateChartChecksum(): string
     {
-        return md5(json_encode($this->getCachedData()));
+        return md5(json_encode($this->chartData));
     }
 
     public function sendChartDataUpdate(): void
     {
+        $this->getCachedData();
+
         $newChecksum = $this->generateChartChecksum();
 
         if ($newChecksum === $this->chartChecksum) {
@@ -60,9 +64,9 @@ trait InteractsWithCharts
         if (method_exists($this, 'dispatch')) {
             $this->dispatch(
                 'updateChartData',
-                chartId: $this->getChart()->key,
-                data: $this->getChart()->chartData(),
-                extras: $this->getChart()->extras->toArray(),
+                chartId: $this->chartKey,
+                data: $this->chartData,
+                extras: $this->chartExtras,
             );
 
             return;
@@ -71,9 +75,9 @@ trait InteractsWithCharts
         // Livewire 2.
         if (method_exists($this, 'emit')) {
             $this->emit('updateChartData', [
-                'chartId' => $this->getChart()->key,
-                'data' => $this->getChart()->chartData(),
-                'extras' => $this->getChart()->extras->toArray(),
+                'chartId' => $this->chartKey,
+                'data' => $this->chartData,
+                'extras' => $this->chartExtras,
             ]);
 
             return;
