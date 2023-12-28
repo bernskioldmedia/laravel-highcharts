@@ -59,6 +59,23 @@ class Chart implements Arrayable, Jsonable
         return $this;
     }
 
+    /**
+     * @param Series[] $series
+     */
+    public function series(array $series): self
+    {
+        $this->series = $series;
+
+        return $this;
+    }
+
+    public function extras(callable $callback): self
+    {
+        $callback($this->extras);
+
+        return $this;
+    }
+
     public function title(string $text): self
     {
         return $this->set('title.text', $text);
@@ -115,11 +132,11 @@ class Chart implements Arrayable, Jsonable
         return $this;
     }
 
-    public function credits(string $text, string $url): self
+    public function credits(string $text, ?string $url = null): self
     {
         return $this->set('credits.enabled', true)
             ->set('credits.text', $text)
-            ->set('credits.href', $url);
+            ->when($url, fn(self $chart) => $chart->set('credits.href', $url));
     }
 
     public function withoutLegend(): self

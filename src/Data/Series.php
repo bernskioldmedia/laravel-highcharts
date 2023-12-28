@@ -63,11 +63,21 @@ class Series implements Arrayable, Jsonable
 
     public function toArray(): array
     {
-        return array_merge(
-            ['data' => $this->data],
-            ['type' => $this->type],
-            $this->options
-        );
+        $data = $this->options;
+
+        if ($this->data) {
+            $data['data'] = collect($this->data)
+                ->map(fn($dataPoint) => $dataPoint instanceof DataPoint
+                    ? $dataPoint->toArray()
+                    : $dataPoint)
+                ->toArray();
+        }
+
+        if ($this->type) {
+            $data['type'] = $this->type;
+        }
+
+        return $data;
     }
 
     public function dump(...$args)

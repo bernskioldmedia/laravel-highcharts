@@ -6,7 +6,7 @@ use BernskioldMedia\LaravelHighcharts\Concerns\Makeable;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
- * @method static ChartLabel make(string $label, int|float $x, int|float $y, string $key = '', array $styles = [], array $attributes = [])
+ * @method static ChartLabel make(string $label, int|float $x = 0.0, int|float $y = 0.0, string $key = '', array $styles = [], array $attributes = [])
  */
 class ChartLabel implements Arrayable
 {

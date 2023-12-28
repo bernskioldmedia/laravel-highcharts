@@ -16,11 +16,11 @@ class LaravelHighchartsServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/../config/highcharts.php' => config_path('highcharts.php'),
-        ], 'highcharts-config');
+        ], 'laravel-highcharts-config');
 
         $this->publishes([
             __DIR__ . '/../resources/views' => resource_path('views/vendor/highcharts'),
-        ], 'highcharts-views');
+        ], 'laravel-highcharts-views');
     }
 
     public function register(): void
