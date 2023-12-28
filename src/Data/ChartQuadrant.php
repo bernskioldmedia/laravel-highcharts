@@ -22,6 +22,11 @@ class ChartQuadrant implements Arrayable
     )
     {
         $this->key = $this->key ?? str()->random(8);
+
+        $this->attributes = array_merge(
+            config('highcharts.chartQuadrants.attributes', []),
+            $this->attributes
+        );
     }
 
     public function x1(float|int $x1): self
