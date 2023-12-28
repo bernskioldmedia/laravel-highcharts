@@ -2,7 +2,7 @@
 
 namespace BernskioldMedia\LaravelHighcharts\Concerns;
 
-use ChartTypes;
+use BernskioldMedia\LaravelHighcharts\Enum\ChartTypes;
 
 trait ConfiguresChartType
 {

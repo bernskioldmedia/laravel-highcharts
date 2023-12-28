@@ -1,5 +1,7 @@
 <?php
 
+namespace BernskioldMedia\LaravelHighcharts\Enum;
+
 enum ChartTypes: string
 {
     case Arcdiagram = 'arcdiagram';
