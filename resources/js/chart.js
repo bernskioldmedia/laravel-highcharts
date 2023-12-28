@@ -29,13 +29,18 @@ export default () => {
 
         exportChart: {
             ['@export-chart.document'](event) {
-                if (this.chart.renderTo.id !== event.detail.chartId) {
+                const chart = getChart(this.$refs.container.id);
+
+                if (chart.renderTo.id !== event.detail.chartId) {
                     return;
                 }
 
-                this.chart.exportChartLocal({
-                    type: event.detail.type,
-                });
+                const exportSettings = event.detail.exportSettings || {};
+                exportSettings.type = event.detail.type;
+
+                const chartOptions = event.detail.options || {};
+
+                chart.exportChartLocal(exportSettings, chartOptions);
             },
         },
 
@@ -53,7 +58,7 @@ export default () => {
                 addQuadrantsToChart(extras.quadrants || [], this);
             }
 
-            const chart = window.Highcharts.chart(this.$refs.container, data);
+            let chart = window.Highcharts.chart(this.$refs.container, data);
             chart.render();
         },
     };
