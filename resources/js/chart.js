@@ -27,21 +27,16 @@ export default () => {
             });
         },
 
-        exportChart: {
-            ['@export-chart.document'](event) {
-                const chart = getChart(this.$refs.container.id);
+        exportChart({detail: {chartId, type, exportSettings = {}, options = {}}}) {
+            const chart = getChart(this.$refs.container.id);
 
-                if (chart.renderTo.id !== event.detail.chartId) {
-                    return;
-                }
+            if (chart.renderTo.id !== chartId) {
+                return;
+            }
 
-                const exportSettings = event.detail.exportSettings || {};
-                exportSettings.type = event.detail.type;
+            exportSettings.type = type;
 
-                const chartOptions = event.detail.options || {};
-
-                chart.exportChartLocal(exportSettings, chartOptions);
-            },
+            chart.exportChartLocal(exportSettings, options);
         },
 
         initChart() {
