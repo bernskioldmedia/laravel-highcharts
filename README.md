@@ -314,6 +314,66 @@ $chart = Chart::make('test-chart')
     });
 ```
 
+### Exporting a chart
+
+Each chart will listen to the `export-chart` event on the `window` object. By triggering this with the appropriate
+details, any chart can be exported either from JavaScript or from Livewire.
+
+The detail object must contain the `chartId` and `type` keys. The `chartId` must match the key you used when building
+the chart. The `type` must be a valid type for the Highcharts `exportChartLocal` method.
+
+The `exportSettings` can take an object with settings for the export per the Highcharts `exportChartLocal` method.
+The `options` take an object with chart options to customize the chart before exporting.
+
+The following example shows how to export a chart from JavaScript:
+
+```js
+window.dispatchEvent(new CustomEvent('export-chart', {
+    detail: {
+        chartId: 'test-chart',
+        type: 'image/png',
+        exportSettings: {}, // Optional.
+        options: {}, // Optional.
+    }
+}));
+```
+
+Using Livewire, you can either use the `dispatch` method, or use the bundled `ExportsChart` trait.
+
+```php
+
+// Using the trait.
+use BernskioldMedia\LaravelHighcharts\Concerns\Livewire\ExportsChart;
+
+$this->exportChart(
+    type: 'image/png',
+    chartKey: 'test-chart',
+    exportSettings: [], // Optional.
+    options: [], // Optional.
+);
+
+// Using Livewire 3's dispatch method.
+$this->dispatch(
+    'exportChart',
+    chartId: 'test-chart',
+    type: 'image/png',
+    exportSettings: [], // Optional.
+    options: [], // Optional.
+);
+```
+
+If you are using the `ExportsChart` trait, you can also customize the export settings and options by adding the 
+the `getChartExportSettings` and ? `getChartOptionsForExport` methods to your Livewire component. To ensure their signature,
+we suggest implementing the bundled `CustomizesChartExportOptions` and `CustomizesChartExportSettings` interfaces.
+
+If you are using the trait on the same component as the `InteractsWithChart` trait you don't have to provide the chart key, and can use the minimal syntax:
+
+```php
+use BernskioldMedia\LaravelHighcharts\Concerns\Livewire\ExportsChart;
+
+$this->exportChart('image/png');
+```
+
 ## Testing
 
 ```bash
