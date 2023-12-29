@@ -9,6 +9,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
+
 use function collect;
 use function dump;
 
@@ -17,10 +18,10 @@ use function dump;
  */
 class ChartExtras implements Arrayable, Jsonable
 {
-    use ConvertsArrayToJson,
-        Makeable,
+    use Conditionable,
+        ConvertsArrayToJson,
         Dumpable,
-        Conditionable,
+        Makeable,
         Tappable;
 
     /**

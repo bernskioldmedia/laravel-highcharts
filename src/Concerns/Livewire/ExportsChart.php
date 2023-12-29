@@ -3,15 +3,15 @@
 namespace BernskioldMedia\LaravelHighcharts\Concerns\Livewire;
 
 use BernskioldMedia\LaravelHighcharts\Exceptions\ChartExportException;
+
 use function method_exists;
 
 trait ExportsChart
 {
-
     /**
      * @throws ChartExportException
      */
-    public function exportChart(string $type, ?string $chartKey = null, array $exportSettings = [], array $chartOptions = []): void
+    public function exportChart(string $type, string $chartKey = null, array $exportSettings = [], array $chartOptions = []): void
     {
         if ($chartKey === null && property_exists($this, 'chartKey')) {
             $chartKey = $this->chartKey;

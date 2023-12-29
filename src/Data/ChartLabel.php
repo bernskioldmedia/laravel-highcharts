@@ -4,6 +4,7 @@ namespace BernskioldMedia\LaravelHighcharts\Data;
 
 use BernskioldMedia\LaravelHighcharts\Concerns\Makeable;
 use Illuminate\Contracts\Support\Arrayable;
+
 use function array_merge;
 
 /**
@@ -14,14 +15,13 @@ class ChartLabel implements Arrayable
     use Makeable;
 
     public function __construct(
-        public string    $label,
+        public string $label,
         public int|float $x = 0.0,
         public int|float $y = 0.0,
-        public string    $key = '',
-        public array     $styles = [],
-        public array     $attributes = [],
-    )
-    {
+        public string $key = '',
+        public array $styles = [],
+        public array $attributes = [],
+    ) {
         $this->key = $this->key ?? str()->random(8);
 
         $this->styles = array_merge(
@@ -44,14 +44,14 @@ class ChartLabel implements Arrayable
 
     public function x(int|float $x): self
     {
-        $this->x = (float)$x;
+        $this->x = (float) $x;
 
         return $this;
     }
 
     public function y(int|float $y): self
     {
-        $this->y = (float)$y;
+        $this->y = (float) $y;
 
         return $this;
     }

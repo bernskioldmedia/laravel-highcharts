@@ -6,7 +6,6 @@ use Illuminate\Support\Arr;
 
 trait HasOptions
 {
-
     protected array $options = [];
 
     public function set(string $key, mixed $value): self

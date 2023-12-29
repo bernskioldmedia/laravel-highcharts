@@ -4,7 +4,6 @@ namespace BernskioldMedia\LaravelHighcharts\Concerns;
 
 trait Dumpable
 {
-
     public function dd(...$args)
     {
         $this->dump(...$args);
@@ -18,5 +17,4 @@ trait Dumpable
 
         return $this;
     }
-
 }

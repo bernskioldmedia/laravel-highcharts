@@ -12,6 +12,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
+
 use function dump;
 
 /**
@@ -19,14 +20,14 @@ use function dump;
  */
 class Series implements Arrayable, Jsonable
 {
-    use HasOptions,
-        Dumpable,
-        Makeable,
-        Conditionable,
-        Tappable,
-        ConfiguresTooltip,
+    use Conditionable,
         ConfiguresChartType,
-        ConvertsArrayToJson;
+        ConfiguresTooltip,
+        ConvertsArrayToJson,
+        Dumpable,
+        HasOptions,
+        Makeable,
+        Tappable;
 
     /**
      * @var array<DataPoint|string|array>
@@ -34,7 +35,7 @@ class Series implements Arrayable, Jsonable
     public array $data = [];
 
     /**
-     * @param array<DataPoint|string|array> $data
+     * @param  array<DataPoint|string|array>  $data
      */
     public function __construct(array $data = [])
     {
@@ -52,7 +53,7 @@ class Series implements Arrayable, Jsonable
     }
 
     /**
-     * @param array<DataPoint|string|array> $data
+     * @param  array<DataPoint|string|array>  $data
      */
     public function data(array $data): self
     {
@@ -67,7 +68,7 @@ class Series implements Arrayable, Jsonable
 
         if ($this->data) {
             $data['data'] = collect($this->data)
-                ->map(fn($dataPoint) => $dataPoint instanceof DataPoint
+                ->map(fn ($dataPoint) => $dataPoint instanceof DataPoint
                     ? $dataPoint->toArray()
                     : $dataPoint)
                 ->toArray();

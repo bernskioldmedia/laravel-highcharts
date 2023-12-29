@@ -3,13 +3,13 @@
 namespace BernskioldMedia\LaravelHighcharts\Concerns\Livewire;
 
 use BernskioldMedia\LaravelHighcharts\Data\Chart;
+
 use function json_encode;
 use function md5;
 use function method_exists;
 
 trait InteractsWithCharts
 {
-
     public ?array $chartData = null;
 
     public ?array $chartExtras = null;

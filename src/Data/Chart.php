@@ -12,6 +12,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
+
 use function dump;
 
 /**
@@ -20,13 +21,13 @@ use function dump;
 class Chart implements Arrayable, Jsonable
 {
     use Conditionable,
-        Makeable,
-        Tappable,
-        Dumpable,
-        HasOptions,
         ConfiguresChartType,
         ConfiguresTooltip,
-        ConvertsArrayToJson;
+        ConvertsArrayToJson,
+        Dumpable,
+        HasOptions,
+        Makeable,
+        Tappable;
 
     public string $key;
 
@@ -37,7 +38,7 @@ class Chart implements Arrayable, Jsonable
      */
     public array $series = [];
 
-    public function __construct(?string $key = null)
+    public function __construct(string $key = null)
     {
         $this->key = $key ?? str()->random(20);
 
@@ -60,7 +61,7 @@ class Chart implements Arrayable, Jsonable
     }
 
     /**
-     * @param Series[] $series
+     * @param  Series[]  $series
      */
     public function series(array $series): self
     {
@@ -86,7 +87,7 @@ class Chart implements Arrayable, Jsonable
         return $this->set('subtitle.text', $text);
     }
 
-    public function xAxis(string $title, float|int|null $min = null, float|int|null $max = null): self
+    public function xAxis(string $title, float|int $min = null, float|int $max = null): self
     {
         $this->set('xAxis.title.text', $title)
             ->set('xAxis.title.enabled', true);
@@ -109,7 +110,7 @@ class Chart implements Arrayable, Jsonable
         return $this;
     }
 
-    public function yAxis(string $title, float|int|null $min = null, float|int|null $max = null): self
+    public function yAxis(string $title, float|int $min = null, float|int $max = null): self
     {
         $this->set('yAxis.title.text', $title)
             ->set('yAxis.title.enabled', true);
@@ -132,11 +133,11 @@ class Chart implements Arrayable, Jsonable
         return $this;
     }
 
-    public function credits(string $text, ?string $url = null): self
+    public function credits(string $text, string $url = null): self
     {
         return $this->set('credits.enabled', true)
             ->set('credits.text', $text)
-            ->when($url, fn(self $chart) => $chart->set('credits.href', $url));
+            ->when($url, fn (self $chart) => $chart->set('credits.href', $url));
     }
 
     public function withoutLegend(): self
@@ -193,7 +194,7 @@ class Chart implements Arrayable, Jsonable
         return $this;
     }
 
-    public function padding(?int $top = null, ?int $right = null, ?int $bottom = null, ?int $left = null): self
+    public function padding(int $top = null, int $right = null, int $bottom = null, int $left = null): self
     {
         if ($top !== null) {
             $this->set('chart.spacingTop', $top);
@@ -214,7 +215,7 @@ class Chart implements Arrayable, Jsonable
         return $this;
     }
 
-    public function margin(?int $top = null, ?int $right = null, ?int $bottom = null, ?int $left = null): self
+    public function margin(int $top = null, int $right = null, int $bottom = null, int $left = null): self
     {
         if ($top !== null) {
             $this->set('chart.marginTop', $top);

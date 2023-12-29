@@ -4,7 +4,8 @@ use BernskioldMedia\LaravelHighcharts\Concerns\ConfiguresTooltip;
 use BernskioldMedia\LaravelHighcharts\Concerns\HasOptions;
 
 beforeEach(function () {
-    $this->testClass = new class {
+    $this->testClass = new class
+    {
         use ConfiguresTooltip,
             HasOptions;
     };

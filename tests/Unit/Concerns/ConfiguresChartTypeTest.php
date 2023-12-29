@@ -3,7 +3,8 @@
 use BernskioldMedia\LaravelHighcharts\Concerns\ConfiguresChartType;
 
 beforeEach(function () {
-    $this->testClass = new class {
+    $this->testClass = new class
+    {
         use ConfiguresChartType;
     };
 });

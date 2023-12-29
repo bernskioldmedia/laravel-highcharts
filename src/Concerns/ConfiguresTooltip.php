@@ -4,8 +4,7 @@ namespace BernskioldMedia\LaravelHighcharts\Concerns;
 
 trait ConfiguresTooltip
 {
-
-    public function tooltipValues(?string $prefix = null, ?string $suffix = null, ?int $decimals = 2): self
+    public function tooltipValues(string $prefix = null, string $suffix = null, ?int $decimals = 2): self
     {
         if ($prefix) {
             $this->set('tooltip.valuePrefix', $prefix);

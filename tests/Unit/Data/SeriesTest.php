@@ -19,11 +19,11 @@ it('can be created with data points', function () {
     $dataPoint = DataPoint::make(1.0, 2.0, 'John');
 
     $series = Series::make([
-        $dataPoint
+        $dataPoint,
     ]);
 
     expect($series->data)->toBe([
-        $dataPoint
+        $dataPoint,
     ]);
 });
 
@@ -80,12 +80,12 @@ it('can output a series with data points to an array', function () {
     $series = Series::make()
         ->bar()
         ->data([
-            $dataPoint
+            $dataPoint,
         ]);
 
     expect($series->toArray())->toBe([
         'data' => [
-            $dataPoint->toArray()
+            $dataPoint->toArray(),
         ],
         'type' => 'bar',
     ]);

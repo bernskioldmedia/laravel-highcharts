@@ -17,10 +17,9 @@ class ChartQuadrant implements Arrayable
         public float|int $y1 = 0.0,
         public float|int $x2 = 0.0,
         public float|int $y2 = 0.0,
-        public array     $attributes = [],
-        public ?string   $key = null
-    )
-    {
+        public array $attributes = [],
+        public ?string $key = null
+    ) {
         $this->key = $this->key ?? str()->random(8);
 
         $this->attributes = array_merge(
@@ -31,28 +30,28 @@ class ChartQuadrant implements Arrayable
 
     public function x1(float|int $x1): self
     {
-        $this->x1 = (float)$x1;
+        $this->x1 = (float) $x1;
 
         return $this;
     }
 
     public function y1(float|int $y1): self
     {
-        $this->y1 = (float)$y1;
+        $this->y1 = (float) $y1;
 
         return $this;
     }
 
     public function x2(float|int $x2): self
     {
-        $this->x2 = (float)$x2;
+        $this->x2 = (float) $x2;
 
         return $this;
     }
 
     public function y2(float|int $y2): self
     {
-        $this->y2 = (float)$y2;
+        $this->y2 = (float) $y2;
 
         return $this;
     }

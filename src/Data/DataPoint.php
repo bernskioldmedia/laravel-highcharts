@@ -16,19 +16,18 @@ use Illuminate\Support\Traits\Tappable;
  */
 class DataPoint implements Arrayable, Jsonable
 {
-    use Makeable,
-        HasOptions,
-        Conditionable,
-        Tappable,
+    use Conditionable,
+        ConvertsArrayToJson,
         Dumpable,
-        ConvertsArrayToJson;
+        HasOptions,
+        Makeable,
+        Tappable;
 
     public function __construct(
         public int|float|null $x = null,
         public int|float|null $y = null,
-        public ?string        $name = null,
-    )
-    {
+        public ?string $name = null,
+    ) {
     }
 
     public function x(int|float|null $x): self

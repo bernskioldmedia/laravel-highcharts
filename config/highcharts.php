@@ -11,11 +11,11 @@ return [
      * Default options to be used for all charts of a specific type.
      */
     'defaultsForType' => [
-//        'line' => [
-//            'title' => [
-//                'text' => 'My Line Chart'
-//            ]
-//        ]
+        //        'line' => [
+        //            'title' => [
+        //                'text' => 'My Line Chart'
+        //            ]
+        //        ]
     ],
 
     /**
@@ -27,8 +27,8 @@ return [
          * CSS styles to be applied to the label.
          */
         'styles' => [
-//            'fontWeight' => 'bold',
-//            'fontSize' => '13px',
+            //            'fontWeight' => 'bold',
+            //            'fontSize' => '13px',
         ],
 
         /**
